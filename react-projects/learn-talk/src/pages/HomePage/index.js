@@ -5,7 +5,8 @@ import Validate from '../../utilities/Validate'
 import Constant from '../../utilities/Constant'
 import CustomScroll from '../../utilities/CustomScroll'
 
-const HomePage = ({ location }) => {
+const HomePage = ({ location }) =>
+{
   // GET STATE
 
   // MANAGEMENT LOCAL STATE
@@ -22,6 +23,8 @@ const HomePage = ({ location }) => {
     fullname: '',
     username: '',
   })
+
+  let myRef = useRef(null)
 
   // Handle Cookies
   useEffect(() => {
@@ -44,9 +47,6 @@ const HomePage = ({ location }) => {
     }
   }
 
-  // OTHER EFFECT
-
-  // OTHER FUNCTION
 
   const getCallBack = () => {
     if (!accCookie) {
@@ -106,13 +106,38 @@ const HomePage = ({ location }) => {
     )
   }
 
-  // Ham chay close popup
-  // set user in cookie = nukll
-  // set account coookie = null
+  // BAT DAU CAC HAM SU LI CAC SU KIEN
+
+  // ham close popup neu nguoi dung dang nhap lai
   const closePopUpCookie = () => {
     setUserInfoCookie(null)
     setAccCookie(null)
   }
+
+  const handleLogin = () =>
+  {
+    setLoading(true)
+    
+    if (!account) {
+      setError('Vui lòng nhập Số điện thoại/Email.')
+
+      Validate.sendError(
+        'login',
+        '',
+        window.location.href,
+        Constant.API_BASE_URL + 'checkpass',
+        '',
+        '',
+        'Vui lòng nhập Số điện thoại/Email.'
+      )
+
+      setLoading(false)
+
+      return
+
+      
+  }
+
 
   // 1. Button submit
   useEffect(() => {
@@ -204,7 +229,66 @@ const HomePage = ({ location }) => {
 
   if (data.signal === 2 || login.signal === 2) {
     return (
-     <p>tuan</p>
+      <Redirect to={{ pathname: '/talk/confirmMobile', state: dataState }} />
+    )
+  }
+
+  if (data.signal === 3 || login.signal === 3) {
+    return (
+      <Redirect to={{ pathname: '/talk/confirmEmail', state: dataState }} />
+    )
+  }
+
+  if (data.signal === 1 || login.signal === 4) {
+    return (
+      <Redirect to={{ pathname: '/talk/enterPassword', state: data.data }} />
+    )
+  }
+
+  if (data.signal === 7) {
+    return (
+      <Redirect to={{ pathname: '/talk/updateMobile', state: dataState }} />
+    )
+  }
+
+  if (login.signal === 1) {
+    return window.location.replace(
+      login.data ? login.data : Constant.REDIRECT_URL
+    )
+  }
+
+  if (!data.signal || !login.signal) {
+    let className = error ? 'input-danger enter-txt' : 'enter-txt'
+    let srcImg = 'https://mingid.mediacdn.vn/king/image/logo-vietid.png'
+
+    return (
+      <div className='wrapper-enter-phone'>
+        <div className='img-back' onClick={() => handleBack()}>
+          <img
+            src='https://mingid.mediacdn.vn/king/image/back.png'
+            alt='back-button'
+          />
+        </div>
+
+        <div className='img-logo'>
+          <img src={srcImg} alt='lotus' />
+        </div>
+
+        <div className='title'>
+          Đăng nhập tài khoản của bạn để tiếp tục sử dụng Lotus Chat
+        </div>
+
+        <div className='wrapper-input'>
+          <input
+            type='text'
+            name='account'
+            placeholder='Nhập số điện thoại hoặc Email'
+            defaultValue={account ? account : ''}
+            ref={myRef}
+            onChange={(event) => handleChange(event.target.value)}
+          />
+        </div>
+      </div>
     )
   }
 
