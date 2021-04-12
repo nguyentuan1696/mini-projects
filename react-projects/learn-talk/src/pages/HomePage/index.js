@@ -135,7 +135,8 @@ const HomePage = ({ location }) =>
 
       return
 
-      
+      account = account.trim
+    }
   }
 
 
