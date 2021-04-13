@@ -1,4 +1,4 @@
-import { DECREASE, INCREASE, CLEAR_CART, REMOVE } from './actions'
+import { DECREASE, INCREASE, CLEAR_CART, REMOVE, GET_TOTALS } from './actions'
 
 const reducer = (state, action) =>
 {
@@ -35,6 +35,10 @@ const reducer = (state, action) =>
 
   if (action.type === REMOVE) {
     return {...state, cart: state.cart.filter((cartItem) => cartItem.id !== action.payload.id)}
+    
+  }
+
+  if (action.type === GET_TOTALS) {
     
   }
   return state
