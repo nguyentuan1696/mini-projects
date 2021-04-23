@@ -29,7 +29,7 @@ const RegisterAccountPage = () => {
     }
   }, [heightKeyBoard])
 
-  let dataState = null
+
 
   const handleChange = (e) => {
     setAccount(e)
@@ -51,9 +51,10 @@ const RegisterAccountPage = () => {
       return
     }
 
-
     account = account.trim()
     account = account.toLowerCase()
+
+    
 
     Validate.sendSuccess(
       'click-register',
@@ -145,12 +146,22 @@ const RegisterAccountPage = () => {
             dataRes.message
           )
           setError(data.message)
-          
-            
-            
         }
       }
     })
+  }
+
+  const handlSecure = () => {
+    window.sendActionToNative(account)
+  }
+
+  const onRegisterCallBackNative = (dataNative) =>
+  {
+    if (dataNative) {
+      window.callback = 1
+    } else {
+      window.callback = 0
+    }
   }
 
   const showError = () => {
@@ -158,7 +169,7 @@ const RegisterAccountPage = () => {
       return <div className='text-orange font15 marginT16'>{error}</div>
     }
   }
-
+  let dataState = null
   if (data) {
     dataState = {
       acc: account ? account.toLocaleLowerCase() : accProps.toLowerCase(),
