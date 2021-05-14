@@ -1,10 +1,15 @@
 package main
 
 import (
+	"log"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/nguyentuan1696/fiber-todo-golang/routes"
+	"github.com/nguyentuan1696/fiber-todo-golang/config"
+	"github.com/joho/godotenv"
 )
+
 
 func setupRoutes(app *fiber.App) {
 	app.Get("/", func(c *fiber.Ctx) error {
@@ -28,19 +33,26 @@ func setupRoutes(app *fiber.App) {
 }
 
 func main() {
+    app := fiber.New()
+    app.Use(logger.New())
 
-	// init app server
-	app := fiber.New()
+    // dotenv
+    err := godotenv.Load()
+    if err != nil {
+        log.Fatal("Error loading .env file")
+    }
 
-	// Middleware
-	app.Use(logger.New())
+    // config db
+    config.ConnectDB()
 
-	// setup routes
-	setupRoutes(app)
+    // setup routes
+    setupRoutes(app)
 
-	// Listn on server 8080 and catch error if any
-	err := app.Listen(":8080")
-	if err != nil {
-		panic(err)
-	}
+    // Listen on server 8000 and catch error if any
+    err = app.Listen(":8000")
+
+    // handle error
+    if err != nil {
+        panic(err)
+    }
 }
