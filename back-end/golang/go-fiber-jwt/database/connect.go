@@ -7,7 +7,7 @@ import (
 	"github.com/jinzhu/gorm"
 
 	"github.com/nguyentuan1696/go-fiber-jwt/config"
-	"github.com/nguyentuan1696/go-fiber-jwt/models"
+	"github.com/nguyentuan1696/go-fiber-jwt/model"
 )
 
 func ConnectDB() {
